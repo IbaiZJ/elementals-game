@@ -19,7 +19,7 @@ OBJ = $(patsubst $(SRC_PATH)%.c, $(BUILD_PATH)%.o, $(SRC))
 CC = gcc
 CFLAGS = -Wall -g `sdl2-config --cflags`
 HEADERS = $(shell find $(SRC_PATH) -name '*.h')
-LDFLAGS = `sdl2-config --libs` -lSDL2_image -lm -lSDL2_mixer
+LDFLAGS = `sdl2-config --libs` -lSDL2_image -lSDL2_ttf -lSDL2_mixer -lm
 
 all: $(BIN_PATH)$(NAME)
 
