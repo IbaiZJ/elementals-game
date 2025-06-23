@@ -75,6 +75,7 @@
     "exploding_drone.h": "c",
     "mobstypes.h": "c",
     "flying_eye.h": "c",
-    "text.h": "c"
+    "text.h": "c",
+    "leafranger.h": "c"
   }
 }

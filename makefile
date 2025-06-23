@@ -17,7 +17,7 @@ SRC = $(shell find $(SRC_PATH) -name '*.c')
 OBJ = $(patsubst $(SRC_PATH)%.c, $(BUILD_PATH)%.o, $(SRC))
 
 CC = gcc
-CFLAGS = -Wall -g `sdl2-config --cflags`
+CFLAGS = -Wall -g `sdl2-config --cflags` -Isrc
 HEADERS = $(shell find $(SRC_PATH) -name '*.h')
 LDFLAGS = `sdl2-config --libs` -lSDL2_image -lSDL2_ttf -lSDL2_mixer -lm
 

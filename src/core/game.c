@@ -51,6 +51,7 @@ void gameLoop() {
         exitEvent(&quit);
         calculateDeltaTime();
         
+        
 
         SDL_RenderPresent(renderer);
     }
