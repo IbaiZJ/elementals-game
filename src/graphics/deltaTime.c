@@ -8,6 +8,10 @@ int frameCount;
 
 float deltaTime = 0.0f;
 
+float getDeltaTime() {
+    return deltaTime;
+}
+
 void initDeltaTime() {
     lastFrameTime = SDL_GetTicks();
     fpsCounterStart = SDL_GetTicks();

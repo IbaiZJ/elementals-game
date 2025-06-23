@@ -29,6 +29,10 @@ int initAll() {
     }
     initDeltaTime();
     // initAudio();
+    if(initInputs() < 0) {
+        printf("SDL could not initialize inputs!");
+        return -1;
+    }
 
     return 1;
 }
@@ -43,6 +47,8 @@ void destroyAll() {
 void gameLoop() {
     Uint8 quit = 0;
 
+    RANGER ranger = initRanger();
+
     while (!quit) {
         SDL_RenderClear(renderer);        
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
@@ -51,7 +57,8 @@ void gameLoop() {
         exitEvent(&quit);
         calculateDeltaTime();
         
-        
+        moveRanger(&ranger);
+        renderRanger(&ranger);
 
         SDL_RenderPresent(renderer);
     }

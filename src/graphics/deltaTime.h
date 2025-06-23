@@ -5,6 +5,9 @@
 
 #include "../ttf/text.h"
 
+extern float deltaTime; 
+
+float getDeltaTime();
 void initDeltaTime();
 void calculateDeltaTime();
 

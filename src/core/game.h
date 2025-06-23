@@ -4,10 +4,11 @@
 #include <SDL2/SDL.h>
 #include <stdbool.h>
 #include <time.h>
-#include "../graphics/window.h"
-#include "../input/input.h"
-#include "../graphics/deltaTime.h"
-#include "../ttf/text.h"
+#include "graphics/window.h"
+#include "graphics/deltaTime.h"
+#include "input/input.h"
+#include "ttf/text.h"
+#include "entityes/heroes/ranger.h"
 
 
 int initAll();

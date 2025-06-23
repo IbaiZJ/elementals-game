@@ -1,9 +1,77 @@
 #include "texture.h"
 
-extern SDL_Renderer* renderer;
-SPRITE textures[100];
+// extern SDL_Renderer* renderer;
+SPRITE textures[MAX_TEXTURES];
 int textureNum = 0;
 
+int loadTexture(char *name) {
+    if(textureNum >= MAX_TEXTURES) {
+        printf("Max texture limit reached!\n");
+        return -1;
+    }
+
+    textures[textureNum].id = textureNum;
+    textures[textureNum].tex = IMG_LoadTexture(getRenderer(), name); 
+    if(!textures[textureNum].tex) {
+        fprintf(stderr, "unable to load %s texture!\n", name);
+    }
+
+    SDL_SetTextureBlendMode(textures[textureNum].tex, SDL_BLENDMODE_BLEND);
+    SDL_QueryTexture(textures[textureNum].tex, NULL, NULL, 
+        &textures[textureNum].src.w, &textures[textureNum].src.h);
+    
+    textures[textureNum].dst.x = textures[textureNum].src.x = 0;
+    textures[textureNum].dst.y = textures[textureNum].src.y = 0;
+    textures[textureNum].dst.w = textures[textureNum].src.w;
+    textures[textureNum].dst.h = textures[textureNum].src.h;
+
+    textureNum++;
+
+    return (textureNum - 1);
+}
+
+int loadTextureAndCropCenterBelow(char *name, int w, int h) {
+    int texNum = loadTexture(name);
+    if(texNum < 0) {
+        return -1;
+    }
+
+    int texW = textures[texNum].src.w;
+    int texH = textures[texNum].src.h;
+
+    int cropX = (texW - w) / 2;
+    int cropY = texH - h;
+
+    if (cropX < 0) cropX = 0;
+    if (cropY < 0) cropY = 0;
+
+    textures[texNum].src.x = cropX;
+    textures[texNum].src.y = cropY;
+    textures[texNum].src.w = textures[texNum].dst.w = w;
+    textures[texNum].src.h = textures[texNum].dst.h = h;
+
+    return texNum;
+}
+
+void renderTexture(int id) {
+    if (id < 0 || id >= textureNum) return;
+    SDL_RenderCopy(getRenderer(), textures[id].tex, &textures[id].src, &textures[id].dst);
+}
+
+void moveImage(int id, int x, int y) {
+    if (id < 0 || id >= textureNum) return;
+    textures[id].dst.x = x;
+    textures[id].dst.y = y;
+}
+
+void scaleImage(int id, int width, int height) {
+    if (id < 0 || id >= textureNum) return;
+    (textures + id)->dst.w = width;
+    (textures + id)->dst.h = height;
+}
+
+
+/*
 int loadTexture(char* str) {
     textures[textureNum].id = textureNum;
 
@@ -116,4 +184,4 @@ void blendImage(int id, int blend) {
     SDL_SetTextureAlphaMod((textures + id)->tex, blend);
     
 } 
-
+*/

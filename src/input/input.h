@@ -11,18 +11,18 @@ typedef struct s_mousepos {
 
 typedef struct s_inputs {
     bool quit;
-    bool speedUP;
-    bool speedDOWN;
-    bool specialShot;
-    bool shot;
-    bool collisions;
+    bool up;
+    bool down;
+    bool left;
+    bool right;
     bool focus;
     MOUSEPOS mousePos;
-    Uint8 renderCollitions;
 } INPUTS;
 
-void initInputs();
+INPUTS* getInput();
+int initInputs();
 void pollEvents();
 void exitEvent(Uint8 *quit);
+void destroyInputs();
 
 #endif

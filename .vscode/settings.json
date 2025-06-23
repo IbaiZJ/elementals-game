@@ -76,6 +76,7 @@
     "mobstypes.h": "c",
     "flying_eye.h": "c",
     "text.h": "c",
-    "leafranger.h": "c"
+    "ranger.h": "c",
+    "entitiestypes.h": "c"
   }
 }
