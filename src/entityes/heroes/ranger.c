@@ -5,6 +5,9 @@ RANGER initRanger(void) {
 
     ranger.pos.x = 100;
     ranger.pos.y = 100;
+    ranger.state = R_IDLE;
+    ranger.animationTime.start = SDL_GetTicks();
+    ranger.animationFrame = 0;
 
     initRangerSprites(&ranger);
 
@@ -12,33 +15,50 @@ RANGER initRanger(void) {
 }
 
 void initRangerSprites(RANGER *ranger) {
-    for (int i = 1; i <= 12; i++) {
-        char path[128];
-        snprintf(path, sizeof(path), RANGER_SPRITES_PATH "idle/idle_%d.png", i);
-        ranger->sprites.idle[i - 1] = loadTextureAndCropCenterBelow(path, RANGER_WIDTH, RANGER_HEIGHT);
-        scaleImage(ranger->sprites.idle[i - 1], RANGER_WIDTH * RANGER_SCALE, RANGER_HEIGHT * RANGER_SCALE);
-    }
+    ranger->sprites.base = loadTexture("assets/img/ranger/ranger_288x128_SpriteSheet.png");
+    scaleImage(ranger->sprites.base, 288 * RANGER_SCALE, 128 * RANGER_SCALE);
+    logMessage(LOG_INFO, "Ranger sprites initialized");
 }
 
 void renderRanger(RANGER *ranger) {
-    renderTexture(ranger->sprites.idle[0]);
+    renderTextureFrames(ranger->sprites.base, (int[]){ ranger->animationFrame, ranger->state}, 288, 128);
 }
 
 void moveRanger(RANGER *ranger) {
     INPUTS* input = getInput();
+    float dt = getDeltaTime();
 
-    if(input->up) {
-        ranger->pos.y -= RANGER_SPEED * getDeltaTime();
-    }
-    if(input->down) {
-        ranger->pos.y += RANGER_SPEED * getDeltaTime();
-    }
     if(input->left) {
-        ranger->pos.x -= RANGER_SPEED * getDeltaTime();
+        ranger->pos.x -= RANGER_SPEED * dt;
     }
     if(input->right) {
-        ranger->pos.x += RANGER_SPEED * getDeltaTime();
+        ranger->pos.x += RANGER_SPEED * dt;
     }
 
-    moveImage(ranger->sprites.idle[0], ranger->pos.x, ranger->pos.y);
+    if(input->jump && ranger->isOnGround) {
+        ranger->velocityY = RANGER_JUMP_FORCE;
+        ranger->isOnGround = false;
+    }
+
+    ranger->velocityY += RANGER_GRAVITY * dt;
+    ranger->pos.y += ranger->velocityY * dt;
+
+    if (ranger->pos.y >= 500.0f) {
+        ranger->pos.y = 500.0f;
+        ranger->velocityY = 0;
+        ranger->isOnGround = true;
+    }
+
+    moveImage(ranger->sprites.base, ranger->pos.x, ranger->pos.y);
+}
+
+void animateRanger(RANGER *ranger) {
+    ranger->animationTime.finish = SDL_GetTicks();
+    if(ranger->animationTime.finish - ranger->animationTime.start > RANGER_ANIMATION_SPEED) {
+        ranger->animationTime.start += RANGER_ANIMATION_SPEED;
+        if(ranger->animationFrame < RANGER_IDLE_ANIMATION_FRAMES - 1 ) {
+            ranger->animationFrame++;
+        }
+        else ranger->animationFrame = 0;
+    }
 }

@@ -6,7 +6,7 @@ int initText(void) {
     if(font == NULL) {
         font = TTF_OpenFontIndex("assets/fonts/Inter.ttf", 16, 0);
         if(font == NULL) {
-            printf("Failed to load font! SDL_ttf Error: %s\n", TTF_GetError());
+            logMessage(LOG_ERROR, "Failed to load font! SDL_ttf Error: %s", TTF_GetError());
             return -1;
         }
     }
@@ -23,7 +23,7 @@ void destroyText(void) {
 
 void renderText(int x, int y, char *text, SDL_Color color) {
     if(font == NULL) {
-        printf("Font not initialized! Call initText() first.\n");
+        logMessage(LOG_ERROR, "Font not initialized! Call initText() first.");
         return;
     }
 

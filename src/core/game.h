@@ -9,6 +9,7 @@
 #include "input/input.h"
 #include "ttf/text.h"
 #include "entityes/heroes/ranger.h"
+#include "log/logger.h"
 
 
 int initAll();

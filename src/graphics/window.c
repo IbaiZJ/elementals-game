@@ -15,7 +15,7 @@ int createWindow() {
         SDL_WINDOW_FULLSCREEN_DESKTOP
     );
     if(!window) {
-        fprintf(stderr, "unable to set window!\n");
+        logMessage(LOG_ERROR, "SDL_CreateWindow failed. Unable to set window!: %s", SDL_GetError());
         return -1;
     }
     return 0;
@@ -28,7 +28,7 @@ void destroyWindow() {
 int createRenderer() {
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
     if(!renderer) {
-        fprintf(stderr, "unable to set renderer!\n");
+        logMessage(LOG_ERROR, "SDL_CreateRenderer failed: %s", SDL_GetError());
         return -1;
     }
     return 0;

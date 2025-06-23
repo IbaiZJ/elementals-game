@@ -3,8 +3,8 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
-
-#include "../graphics/window.h"
+#include "log/logger.h"
+#include "graphics/window.h"
 
 int initText(void);
 void destroyText(void);

@@ -10,12 +10,12 @@ INPUTS* getInput() {
 int initInputs() {
     input = (INPUTS*)malloc(sizeof(INPUTS));
     if (input == NULL) {
-        fprintf(stderr, "Failed to allocate memory for input structure\n");
+        logMessage(LOG_ERROR, "Failed to allocate memory for input structure");
         return -1;
     }
 
     input->quit = false;
-    input->up = false;
+    input->jump = false;
     input->down = false;
     input->left = false;
     input->right = false;
@@ -52,7 +52,7 @@ void pollEvents() {
 
                 case SDLK_UP:
                 case SDLK_w:
-                    input->up = true;
+                    input->jump = true;
                     break;
                 case SDLK_DOWN:
                 case SDLK_s:
@@ -76,7 +76,7 @@ void pollEvents() {
             switch (event.key.keysym.sym) {
                 case SDLK_UP:
                 case SDLK_w:
-                    input->up = false;
+                    input->jump = false;
                     break;
                 case SDLK_DOWN:
                 case SDLK_s:

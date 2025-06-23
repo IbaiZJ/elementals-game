@@ -3,7 +3,7 @@
 
 #include <SDL2/SDL.h>
 
-#include "../ttf/text.h"
+#include "ttf/text.h"
 
 extern float deltaTime; 
 

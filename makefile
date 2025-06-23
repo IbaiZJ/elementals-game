@@ -10,7 +10,7 @@ endif
 
 BIN_PATH = bin/
 BUILD_PATH = build/
-NAME = GAME
+NAME = ELEMENALS
 
 SRC_PATH = src/
 SRC = $(shell find $(SRC_PATH) -name '*.c')

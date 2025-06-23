@@ -7,10 +7,11 @@ typedef struct s_position {
 } POSITION;
 
 typedef enum {
-    IDLE,
-    MOVING,
-    HIT,
-    DEAD
+    E_IDLE,
+    E_MOVING,
+    E_JUMPING,
+    E_HIT,
+    E_DEAD
 } STATE;
 
 typedef struct s_formula {
@@ -19,6 +20,9 @@ typedef struct s_formula {
     double cos;
 } FORMULA;
 
-
+typedef struct s_time {
+    double start;
+    double finish;
+} TIME;
 
 #endif

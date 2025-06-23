@@ -5,6 +5,7 @@
 #include <SDL_image.h>
 
 #include "window.h"
+#include "log/logger.h"
 
 #define MAX_TEXTURES 128
 
@@ -17,6 +18,7 @@ typedef struct s_sprite {
 int loadTexture(char* name);
 int loadTextureAndCropCenterBelow(char *name, int w, int h);
 void renderTexture(int id);
+void renderTextureFrames(int id, int *frame, int frameW, int frameH);
 void moveImage(int id, int x, int y);
 void scaleImage(int id, int width, int height);
 

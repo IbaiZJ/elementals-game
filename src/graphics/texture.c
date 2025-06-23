@@ -1,38 +1,39 @@
 #include "texture.h"
 
-// extern SDL_Renderer* renderer;
 SPRITE textures[MAX_TEXTURES];
 int textureNum = 0;
 
 int loadTexture(char *name) {
-    if(textureNum >= MAX_TEXTURES) {
-        printf("Max texture limit reached!\n");
+    if (textureNum >= MAX_TEXTURES) {
+        logMessage(LOG_ERROR, "Max texture limit (%d) reached!", MAX_TEXTURES);
         return -1;
     }
 
     textures[textureNum].id = textureNum;
     textures[textureNum].tex = IMG_LoadTexture(getRenderer(), name); 
-    if(!textures[textureNum].tex) {
-        fprintf(stderr, "unable to load %s texture!\n", name);
+    if (!textures[textureNum].tex) {
+        logMessage(LOG_ERROR, "Unable to load texture: %s | SDL_Error: %s", name, SDL_GetError());
+        return -1;
     }
 
     SDL_SetTextureBlendMode(textures[textureNum].tex, SDL_BLENDMODE_BLEND);
     SDL_QueryTexture(textures[textureNum].tex, NULL, NULL, 
         &textures[textureNum].src.w, &textures[textureNum].src.h);
-    
+
     textures[textureNum].dst.x = textures[textureNum].src.x = 0;
     textures[textureNum].dst.y = textures[textureNum].src.y = 0;
     textures[textureNum].dst.w = textures[textureNum].src.w;
     textures[textureNum].dst.h = textures[textureNum].src.h;
 
-    textureNum++;
+    logMessage(LOG_INFO, "Texture loaded: %s [id=%d, size=%dx%d]", 
+               name, textureNum, textures[textureNum].src.w, textures[textureNum].src.h);
 
-    return (textureNum - 1);
+    return textureNum++;
 }
 
 int loadTextureAndCropCenterBelow(char *name, int w, int h) {
     int texNum = loadTexture(name);
-    if(texNum < 0) {
+    if (texNum < 0) {
         return -1;
     }
 
@@ -54,21 +55,45 @@ int loadTextureAndCropCenterBelow(char *name, int w, int h) {
 }
 
 void renderTexture(int id) {
-    if (id < 0 || id >= textureNum) return;
+    if (id < 0 || id >= textureNum) {
+        logMessage(LOG_WARNING, "Attempt to render invalid texture ID: %d", id);
+        return;
+    }
+    SDL_RenderCopy(getRenderer(), textures[id].tex, &textures[id].src, &textures[id].dst);
+}
+
+void renderTextureFrames(int id, int *frame, int frameW, int frameH) {
+    if (id < 0 || id >= textureNum || frame[0] < 0 || frame[1] < 0) {
+        logMessage(LOG_WARNING, "Invalid frame render call: id=%d frame=(%d,%d)", id, frame[0], frame[1]);
+        return;
+    }
+
+    textures[id].src.x = frame[0] * frameW;
+    textures[id].src.w = frameW;
+    textures[id].src.y = frame[1] * frameH;
+    textures[id].src.h = frameH;
+
     SDL_RenderCopy(getRenderer(), textures[id].tex, &textures[id].src, &textures[id].dst);
 }
 
 void moveImage(int id, int x, int y) {
-    if (id < 0 || id >= textureNum) return;
+    if (id < 0 || id >= textureNum) {
+        logMessage(LOG_WARNING, "Invalid moveImage call: id=%d", id);
+        return;
+    }
     textures[id].dst.x = x;
     textures[id].dst.y = y;
 }
 
 void scaleImage(int id, int width, int height) {
-    if (id < 0 || id >= textureNum) return;
-    (textures + id)->dst.w = width;
-    (textures + id)->dst.h = height;
+    if (id < 0 || id >= textureNum) {
+        logMessage(LOG_WARNING, "Invalid scaleImage call: id=%d", id);
+        return;
+    }
+    textures[id].dst.w = width;
+    textures[id].dst.h = height;
 }
+
 
 
 /*

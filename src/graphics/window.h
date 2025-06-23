@@ -2,6 +2,7 @@
 #define WINDOW_H
 
 #include <SDL2/SDL.h>
+#include "log/logger.h"
 
 #define GAME_NAME "ELEMENTALS"
 #define GAME_WIDTH 1920

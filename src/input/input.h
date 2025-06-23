@@ -3,6 +3,7 @@
 
 #include <SDL2/SDL.h>
 #include <stdbool.h>
+#include "log/logger.h"
 
 typedef struct s_mousepos {
     int x;
@@ -11,7 +12,7 @@ typedef struct s_mousepos {
 
 typedef struct s_inputs {
     bool quit;
-    bool up;
+    bool jump;
     bool down;
     bool left;
     bool right;
