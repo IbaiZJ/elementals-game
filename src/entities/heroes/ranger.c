@@ -5,6 +5,11 @@
 #define RANGER_SCALE 2
 #define RANGER_SPEED 400
 
+#define RANGER_WIDTH 50
+#define RANGER_HEIGHT 50
+#define RANGER_SPRITE_WIDTH 288
+#define RANGER_SPRITE_HEIGHT 128
+
 #define RANGER_GRAVITY 8000.0f
 #define RANGER_JUMP_FORCE -2400.0f
 
@@ -37,19 +42,26 @@ RANGER initRanger(void) {
 
 void initRangerSprites(RANGER *ranger) {
     ranger->sprites.base = loadTexture("assets/img/ranger/ranger_288x128_SpriteSheet.png");
-    scaleImage(ranger->sprites.base, 288 * RANGER_SCALE, 128 * RANGER_SCALE);
+    scaleImage(ranger->sprites.base, 
+        RANGER_SPRITE_WIDTH * RANGER_SCALE, RANGER_SPRITE_HEIGHT * RANGER_SCALE);
 
     logMessage(LOG_INFO, "Ranger sprites initialized");
 }
 
 void renderRanger(RANGER *ranger) {
-    renderTextureFramesGetFlipHorizontal(ranger->sprites.base, 
-        (int[]){ ranger->animationFrame, getSpriteAnimationRow(ranger) }, 288, 128, ranger->horizontalPosition);
-    
     SDL_Renderer *renderer = getRenderer();
+
+    renderTextureFramesGetFlipHorizontal(ranger->sprites.base, 
+        (int[]){ ranger->animationFrame, getSpriteAnimationRow(ranger) }, 
+        288, 128, ranger->horizontalPosition);
+    
+    SDL_Rect rangerRect;
+    rangerRect.x = ranger->pos.x;
+    rangerRect.y = ranger->pos.y;
+    rangerRect.w = 288 * RANGER_SCALE;
+    rangerRect.h = 128 * RANGER_SCALE;
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
-    SDL_RenderDrawRect(renderer, 
-        &(SDL_Rect){ ranger->pos.x, ranger->pos.y, 288 * RANGER_SCALE, 128 * RANGER_SCALE });
+    SDL_RenderDrawRect(renderer, &rangerRect);
 
     char arr[32];
     snprintf(arr, sizeof(arr), "VelocityY: %.0f", ranger->velocityY);
@@ -61,6 +73,7 @@ void moveRanger(RANGER *ranger) {
     INPUTS* input = getInput();
     float dt = getDeltaTime();
 
+    // Gravity
     if(input->jump && ranger->isOnGround) {
         ranger->velocityY = RANGER_JUMP_FORCE;
         ranger->isOnGround = false;
