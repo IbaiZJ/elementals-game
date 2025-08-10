@@ -1,21 +1,21 @@
 #include "ranger.h"
 
-// static const int RANGER_WIDTH = 50;
-// static const int RANGER_HEIGHT = 50;
-static const int RANGER_SCALE = 2;
-static const int RANGER_SPEED = 400;
+// #define RANGER_WIDTH = 50;
+// #define RANGER_HEIGHT = 50;
+#define RANGER_SCALE 2
+#define RANGER_SPEED 400
 
-static const float RANGER_GRAVITY = 8000.0f;
-static const float RANGER_JUMP_FORCE = -2400.0f;
+#define RANGER_GRAVITY 8000.0f
+#define RANGER_JUMP_FORCE -2400.0f
 
-static const int RANGER_IDLE_ANIMATION_FRAMES = 12;
-static const int RANGER_IDLE_ANIMATION_SPEED = 120;
-static const int RANGER_MOVING_ANIMATION_FRAMES = 10;
-static const int RANGER_MOVING_ANIMATION_SPEED = 70;
-static const int RANGER_JUMPING_ANIMATION_FRAMES = 3;
-static const int RANGER_JUMPING_ANIMATION_SPEED = 70;
-static const int RANGER_ROLL_ANIMATION_FRAMES = 8;
-static const int RANGER_ROLL_ANIMATION_SPEED = 100;
+#define RANGER_IDLE_ANIMATION_FRAMES 12
+#define RANGER_IDLE_ANIMATION_SPEED 120
+#define RANGER_MOVING_ANIMATION_FRAMES 10
+#define RANGER_MOVING_ANIMATION_SPEED 70
+#define RANGER_JUMPING_ANIMATION_FRAMES 3
+#define RANGER_JUMPING_ANIMATION_SPEED 70
+#define RANGER_ROLL_ANIMATION_FRAMES 8
+#define RANGER_ROLL_ANIMATION_SPEED 100
 
 
 RANGER initRanger(void) {
@@ -45,8 +45,13 @@ void initRangerSprites(RANGER *ranger) {
 void renderRanger(RANGER *ranger) {
     renderTextureFramesGetFlipHorizontal(ranger->sprites.base, 
         (int[]){ ranger->animationFrame, getSpriteAnimationRow(ranger) }, 288, 128, ranger->horizontalPosition);
+    
+    SDL_Renderer *renderer = getRenderer();
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
+    SDL_RenderDrawRect(renderer, 
+        &(SDL_Rect){ ranger->pos.x, ranger->pos.y, 288 * RANGER_SCALE, 128 * RANGER_SCALE });
 
-    char arr[24];
+    char arr[32];
     snprintf(arr, sizeof(arr), "VelocityY: %.0f", ranger->velocityY);
     renderText(10, 50, arr, (SDL_Color){255, 255, 255, 255});
     renderText(10, 70, getStateName(ranger->state), (SDL_Color){255, 255, 255, 255});

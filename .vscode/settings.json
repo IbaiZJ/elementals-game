@@ -87,6 +87,7 @@
     "tuple": "c",
     "type_traits": "c",
     "utility": "c",
-    "stdarg.h": "c"
+    "stdarg.h": "c",
+    "stdbool.h": "c"
   }
 }

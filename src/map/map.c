@@ -2,7 +2,7 @@
 #include "graphics/window.h"
 
 MAP initMap() {
-    char mapName[256] = "assets/maps/map.txt";
+    char mapName[] = "assets/maps/map.txt";
     FILE* fp;
     MAP map = { 0 };
 
@@ -37,33 +37,16 @@ void freeMap(MAP* map) {
 }
 
 void renderMap(MAP* map) {
-    /*SDL_Renderer* renderer = getRenderer();
-
-    for (int y = 0; y < map->height; y++) {
-        for (int x = 0; x < map->width; x++) {
-            int type = map->tiles[y][x];
-
-            switch (type) {
-                case TT_VOID:
-                    SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE); break;
-                case TT_GROUND:
-                    SDL_SetRenderDrawColor(renderer, 0, 255, 0, SDL_ALPHA_OPAQUE); break;
-                case TT_PLATFORM:
-                    SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE); break;
-            }
-
-            SDL_Rect rect = { x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE };
-            SDL_RenderFillRect(renderer, &rect);
-        }
-    }*/
-
     SDL_Renderer* renderer = getRenderer();
     SDL_SetRenderDrawColor(renderer, 0, 255, 0, SDL_ALPHA_OPAQUE);
 
     for(int i = 0; i < GAME_WIDTH / TILE_SIZE; i++) {
         for(int j = 0; j < GAME_HEIGHT / TILE_SIZE; j++) {
             SDL_Rect tileRect = { i * TILE_SIZE, j * TILE_SIZE, TILE_SIZE, TILE_SIZE };
-            SDL_RenderDrawRect(renderer, &tileRect);
+            if(map->height <= j || 
+                map->width <= i) continue;
+            else if(map->tiles[j][i] == 0) SDL_RenderDrawRect(renderer, &tileRect);
+            else SDL_RenderFillRect(renderer, &tileRect);
         }
     }
 }

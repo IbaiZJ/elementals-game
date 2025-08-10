@@ -43,3 +43,4 @@ void renderText(int x, int y, char *text, SDL_Color color) {
 	SDL_FreeSurface(textSurface);
 	SDL_DestroyTexture(mTexture);
 }
+
