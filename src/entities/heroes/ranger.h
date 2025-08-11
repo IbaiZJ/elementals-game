@@ -45,7 +45,7 @@ typedef struct s_ranger {
 RANGER initRanger(void);
 void initRangerSprites(RANGER *ranger);
 void renderRanger(RANGER *ranger);
-void moveRanger(RANGER* ranger);
+void moveRanger(RANGER* ranger, MAP map);
 void updateRangerState(RANGER *ranger);
 void animateRanger(RANGER *ranger);
 Uint8 getRangerStateMaxFrames(RANGER *ranger);

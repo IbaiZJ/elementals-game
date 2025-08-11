@@ -28,14 +28,13 @@ RANGER initRanger(void) {
 
     ranger.pos.x = 100;
     ranger.pos.y = 100;
+    initRangerSprites(&ranger);
     ranger.state = R_IDLE;
     ranger.horizontalPosition = HORIZONTAL_RIGHT;
     ranger.animationTime.start = SDL_GetTicks();
     ranger.animationFrame = 0;
     ranger.isOnGround = true;
     ranger.velocityY = 0.0f;
-
-    initRangerSprites(&ranger);
 
     return ranger;
 }
@@ -51,9 +50,13 @@ void initRangerSprites(RANGER *ranger) {
 void renderRanger(RANGER *ranger) {
     SDL_Renderer *renderer = getRenderer();
 
-    renderTextureFramesGetFlipHorizontal(ranger->sprites.base, 
+    /* renderTextureFramesGetFlipHorizontal(ranger->sprites.base, 
         (int[]){ ranger->animationFrame, getSpriteAnimationRow(ranger) }, 
+        288, 128, ranger->horizontalPosition); */
+    renderTextureFramesGetFlipHorizontal(ranger->sprites.base, 
+        (int[]){ 0, 0 }, 
         288, 128, ranger->horizontalPosition);
+    
     
     SDL_Rect rangerRect;
     rangerRect.x = ranger->pos.x;
@@ -62,14 +65,24 @@ void renderRanger(RANGER *ranger) {
     rangerRect.h = 128 * RANGER_SCALE;
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
     SDL_RenderDrawRect(renderer, &rangerRect);
+    rangerRect.x -= 200;
+    rangerRect.y += 128 * RANGER_SCALE;
+    rangerRect.h = 1;
+    rangerRect.w = 1000;
+    SDL_RenderDrawRect(renderer, &rangerRect);
+    rangerRect.x = ranger->pos.x + 288 - 55;
+    rangerRect.y = ranger->pos.y + 128 * 2 - 110;
+    rangerRect.w = 110;
+    rangerRect.h = 110;
+    SDL_RenderDrawRect(renderer, &rangerRect);
 
-    char arr[32];
+    /*char arr[32];
     snprintf(arr, sizeof(arr), "VelocityY: %.0f", ranger->velocityY);
     renderText(10, 50, arr, (SDL_Color){255, 255, 255, 255});
-    renderText(10, 70, getStateName(ranger->state), (SDL_Color){255, 255, 255, 255});
+    renderText(10, 70, getStateName(ranger->state), (SDL_Color){255, 255, 255, 255});*/
 }
 
-void moveRanger(RANGER *ranger) {
+void moveRanger(RANGER *ranger, MAP map) {
     INPUTS* input = getInput();
     float dt = getDeltaTime();
 
@@ -77,7 +90,7 @@ void moveRanger(RANGER *ranger) {
     if(input->jump && ranger->isOnGround) {
         ranger->velocityY = RANGER_JUMP_FORCE;
         ranger->isOnGround = false;
-        toggleRangerState(ranger, R_JUMPING);
+        // toggleRangerState(ranger, R_JUMPING);
     }
 
     ranger->velocityY += RANGER_GRAVITY * dt;

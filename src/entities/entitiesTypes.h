@@ -11,14 +11,6 @@ typedef enum {
     HORIZONTAL_LEFT
 } HORIZONTAL_POSITION;
 
-typedef enum {
-    E_IDLE,
-    E_MOVING,
-    E_JUMPING,
-    E_HIT,
-    E_DEAD
-} STATE;
-
 typedef struct s_formula {
     double hill;
     double sin;

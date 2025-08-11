@@ -69,7 +69,7 @@ void gameLoop() {
         exitEvent(&quit);
         calculateDeltaTime();
 
-        moveRanger(&ranger);
+        moveRanger(&ranger, map);
         animateRanger(&ranger);
 
         renderMap(&map);
